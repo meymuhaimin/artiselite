@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import NewsList from '../NewsList';
 
+const NewsPerPage = 10;
+
 function AdvanceSearch() {
   const [articles, setArticles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,7 +11,10 @@ function AdvanceSearch() {
   const [language, setLanguage] = useState('en');
   const [sortBy, setSortBy] = useState('publishedAt');
   const [source, setSource] = useState('');
+  const [category, setCategory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
 
   useEffect(() => {
     const apiKey = 'a63649f2a73842318d2443617b78ffb1'; 
@@ -25,13 +30,21 @@ function AdvanceSearch() {
         if (language) url.searchParams.append('language', language);
         if (sortBy) url.searchParams.append('sortBy', sortBy);
         if (source) url.searchParams.append('sources', source);
+        if (category) url.searchParams.append('category', category);
+        url.searchParams.append('pageSize', NewsPerPage);
+        url.searchParams.append('page', currentPage);
 
         const response = await fetch(url.toString());
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setArticles(data.articles);
+        if (currentPage === 1) {
+          setArticles(data.articles);
+        } else {
+          setArticles((prevArticles) => [...prevArticles, ...data.articles]);
+        }
+        setTotalResults(data.totalResults);
       } catch (error) {
         console.error('Fetching error:', error);
       } finally {
@@ -39,18 +52,26 @@ function AdvanceSearch() {
       }
     };
 
-    if (searchTerm) {
+    if (searchTerm || fromDate || toDate || language || sortBy || source || category) {
       const debounceTimeout = setTimeout(() => {
         fetchData();
       }, 500);
 
       return () => clearTimeout(debounceTimeout);
     }
-  }, [searchTerm, fromDate, toDate, language, sortBy, source]);
+  }, [searchTerm, fromDate, toDate, language, sortBy, source, category, currentPage]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+    setCurrentPage(1);
   };
+
+  const handleLoadMore = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const isEndOfResults = articles.length >= totalResults;
+  console.log(articles.length)
 
   return (
     <>
@@ -103,14 +124,35 @@ function AdvanceSearch() {
             <option value="cnn">CNN</option>
             <option value="fox-news">Fox News</option>
           </select>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="mr-4 p-2 border border-gray-600 rounded-lg"
+          >
+            <option value="">All Categories</option>
+            <option value="technology">Technology</option>
+            <option value="business">Business</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="health">Health</option>
+            <option value="science">Science</option>
+            <option value="sports">Sports</option>
+            <option value="general">General</option>
+          </select>
         </div>
       </div>
       {isLoading ? (
         <div className="m-20">
-            <p>Loading...</p>
+          <p>Loading...</p>
         </div>
       ) : (
-        <NewsList news={articles}/>
+        <>
+          <NewsList news={articles} />
+          {!isEndOfResults && (
+            <button className="flex mx-auto my-4 p-2 border border-gray-600 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-700 focus:outline-none" onClick={handleLoadMore}>
+              Load More
+            </button>
+          )}
+        </>
       )}
     </>
   );

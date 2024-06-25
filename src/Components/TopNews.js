@@ -26,7 +26,7 @@ function NewsSearch(props) {
   }, []);
 
   return (
-    <div className="news-search grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-20">
+    <div className="news-search grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-20">
 
       {fetchedArticles.length > 0 ? (
         fetchedArticles.map((article) => (
@@ -34,13 +34,12 @@ function NewsSearch(props) {
             key={article.url}
             className="p-4 bg-white rounded-lg shadow-md"
           >
-            {article.urlToImage && (
+            
               <img
                 src={article.urlToImage}
                 alt={article.title}
                 className="w-full h-48 object-cover rounded-t-lg"
               />
-            )}
             <h2 className="text-lg font-medium mb-2">{article.title}</h2>
             <p className="text-gray-700 mb-4">{article.description}</p>
             <a
