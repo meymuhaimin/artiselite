@@ -142,16 +142,18 @@ function AdvanceSearch() {
         </div>
       </div>
       {isLoading ? (
-        <div className="m-20">
-          <p>Loading...</p>
-        </div>
+        <div className="flex justify-center items-center m-20">
+          <div className="w-16 h-16 border-4 border-blue-500 border-solid border-t-transparent rounded-full animate-spin"></div>
+      </div>
       ) : (
         <>
           <NewsList news={articles} />
           {!isEndOfResults && (
-            <button className="flex mx-auto my-4 p-2 border border-gray-600 rounded-lg bg-gray-800 text-white font-bold hover:bg-gray-400 focus:outline-none" onClick={handleLoadMore}>
-              Load More
+            <div className="mb-20">
+            <button className="flex mx-auto my-4 mb-20 p-2 border border-gray-600 rounded-lg bg-gray-800 text-white font-bold hover:bg-gray-400 focus:outline-none" onClick={handleLoadMore}>
+                Load More
             </button>
+        </div>
           )}
         </>
       )}
