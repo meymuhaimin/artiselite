@@ -5,7 +5,7 @@ import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode> i disable this to enable the drag and drop feature
     <App />
-  </React.StrictMode>
+  // </React.StrictMode>
 );
