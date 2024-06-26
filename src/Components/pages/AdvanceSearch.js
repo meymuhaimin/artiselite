@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import NewsList from '../NewsList';
+import Footer from '../Footer';
 
 const NewsPerPage = 10;
 
@@ -148,12 +149,13 @@ function AdvanceSearch() {
         <>
           <NewsList news={articles} />
           {!isEndOfResults && (
-            <button className="flex mx-auto my-4 p-2 border border-gray-600 rounded-lg bg-blue-500 text-white font-bold hover:bg-blue-700 focus:outline-none" onClick={handleLoadMore}>
+            <button className="flex mx-auto my-4 p-2 border border-gray-600 rounded-lg bg-gray-800 text-white font-bold hover:bg-gray-400 focus:outline-none" onClick={handleLoadMore}>
               Load More
             </button>
           )}
         </>
       )}
+      <Footer />
     </>
   );
 }
