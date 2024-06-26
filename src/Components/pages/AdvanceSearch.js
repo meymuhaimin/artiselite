@@ -72,7 +72,6 @@ function AdvanceSearch() {
   };
 
   const isEndOfResults = articles.length >= totalResults;
-  console.log(articles.length)
 
   return (
     <>

@@ -31,8 +31,6 @@ const NewsSearch = () => {
     setFetchedArticles(items);
   };
 
-  console.log(fetchedArticles);
-
   return (
     <div className="news-search container mx-auto p-20">
       {fetchedArticles.length > 0 ? (
